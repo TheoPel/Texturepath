@@ -1,0 +1,44 @@
+import maya.cmds as cmds
+
+#class
+class MR_TextureLink(object):
+
+       #constructor function
+    def __init__(self):		
+            self.window = "relinkWindow"
+			self.title = "Texture Relink Window"
+			self.size (600, 350)
+			self.createWindow()
+			
+			
+       #Create window function
+	   def createWindow(self):
+	   
+	      if cmds.window(self.window, exists=True):
+		     cmds.deleteUI(self.window, window=True)
+			 
+			 
+        self.window = cmds.window(self.window, title=self.title, widthHeight=self.size)
+        
+        # define window UI
+        self.mainForm = cmds.formLayout(numberofDivisions = 100);
+        
+        self.titleDisplay = cmds.text(label = self.title, align="center", font="boldLabelFont")
+        cmds.formLayout(self.mainForm, edit=True,   attachForm=(  [self.titleDisplay, "top", 5],
+                                                                   [self.titleDisplay, "left", 5],
+                                                                   [self.titleDisplay, "right", 5], ))
+                                                                   
+                                                                   
+        self.titleSeparator = cmds.separator() ;
+        cmds.formLayout(self.mainForm, edit=True  attachControl=[self.titleSeparator, "top", 10 , self.titleDisplay],
+                                                  attachForm=([self.titleSeparator, "left", 5],
+                                                              [self.titleSeparator, "right", 5]          ))
+                                                              
+        self.btnFolderSet = cmds.button(label="Set Texture Folder", height=30, width=150, command=self.SetFolerBtnCmd)
+        cmds.formLayout(self.mainForm, edit=True, attachControl=[self.btnFolderSet, "top", 20, self.titleDisplay],
+                                                  attachForm=[self.btnFolderSet, "left", 5])
+                                                  
+       cmds.showWindow();
+       
+       self.textFieldFolderLocation = cmds.textField(text="set location")
+       cmds.formLayout(self.mainForm, edit=True, attachControl=([]))  
