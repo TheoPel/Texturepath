@@ -62,7 +62,7 @@ class MR_TextureLink(object):
                 pathList = currPath.split("/")
                 filename = pathList(-1)
                 
-                newPath = "" (basePath, filename)
+                newPath = "%s/%s" %(basePath, filename)
                 
                 cmds.setAttr(node + ".fileTextureName", newPath, type="string")
                 
