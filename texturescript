@@ -9,36 +9,68 @@ class MR_TextureLink(object):
 			self.title = "Texture Relink Window"
 			self.size (600, 350)
 			self.createWindow()
-			
-			
+
+
        #Create window function
 	   def createWindow(self):
-	   
+
 	      if cmds.window(self.window, exists=True):
 		     cmds.deleteUI(self.window, window=True)
-			 
-			 
+
+
         self.window = cmds.window(self.window, title=self.title, widthHeight=self.size)
-        
+
         # define window UI
         self.mainForm = cmds.formLayout(numberofDivisions = 100);
-        
+
         self.titleDisplay = cmds.text(label = self.title, align="center", font="boldLabelFont")
         cmds.formLayout(self.mainForm, edit=True,   attachForm=(  [self.titleDisplay, "top", 5],
                                                                    [self.titleDisplay, "left", 5],
                                                                    [self.titleDisplay, "right", 5], ))
-                                                                   
-                                                                   
+
+
         self.titleSeparator = cmds.separator() ;
         cmds.formLayout(self.mainForm, edit=True  attachControl=[self.titleSeparator, "top", 10 , self.titleDisplay],
                                                   attachForm=([self.titleSeparator, "left", 5],
                                                               [self.titleSeparator, "right", 5]          ))
-                                                              
+
         self.btnFolderSet = cmds.button(label="Set Texture Folder", height=30, width=150, command=self.SetFolerBtnCmd)
         cmds.formLayout(self.mainForm, edit=True, attachControl=[self.btnFolderSet, "top", 20, self.titleDisplay],
                                                   attachForm=[self.btnFolderSet, "left", 5])
-                                                  
+
        cmds.showWindow();
-       
+
        self.textFieldFolderLocation = cmds.textField(text="set location")
-       cmds.formLayout(self.mainForm, edit=True, attachControl=([]))  
+       cmds.formLayout(self.mainForm, edit=True, attachControl=([self.txtFieldFolderLocation, "top", 20, self.titleDisplay],
+                                                                [self.txtFieldFolderLocation, "left", 5, self.btnFolderSet],                            
+                                                 attachForm=[self.txtFieldFolderLocation, "right", 5]) 
+      
+      self.btnRelinkTextures = cmds.button(label="Relink Textures", height=30, width=150, command=self.relinkBtnCmd)
+      cmds.formLayout(self.mainForm, edit=True attachControl=[self.btnRelinkTextures, "top", 5, self.btnFolderSet],
+                                               attachForm=[self.btnRelinkTextures, "left", 5])   
+                                               
+     #set textures button    
+     
+     def    relinkBtnCmd(self, *args):
+            basePath = cmds.textField(self.txtFieldFolderLocation, query=True, text=True):
+                
+            fileNodes = cmds.ls(type="file")
+            
+            for node in fileNodes:
+                
+                currPath = cmds.getAttr(node + ".fileTextureName")
+                pathList = currPath.split("/")
+                filename = pathList(-1)
+                
+                newPath = "" (basePath, filename)
+                
+                cmds.setAttr(node + ".fileTextureName", newPath, type="string")
+                
+                
+  
+  # set folder function
+  
+  def relinkFolder(self, fileName, fileType):
+      cmds.textField(self.txtFieldFolderLocation, edit=True, text=fileName);
+      
+myTextRelink = MR_TextureLink() 
