@@ -1,26 +1,28 @@
 import maya.cmds as cmds
 
-#class
-class MR_TextureLink(object):
+class TextureLink(object):
 
-       #constructor function
+       # constructor function
+       
     def __init__(self):		
-            self.window = "relinkWindow"
-			self.title = "Texture Relink Window"
-			self.size (600, 350)
-			self.createWindow()
+        self.window = "relinkWindow"
+        self.title = "Texture Relink Window"
+        self.size (600, 350)
+        self.createWindow()
 
 
        #Create window function
-	   def createWindow(self):
+       
+        def createWindow(self):
 
-	      if cmds.window(self.window, exists=True):
-		     cmds.deleteUI(self.window, window=True)
+            if cmds.window(self.window, exists=True):
+                cmds.deleteUI(self.window, window=True)
 
 
         self.window = cmds.window(self.window, title=self.title, widthHeight=self.size)
 
         # define window UI
+        
         self.mainForm = cmds.formLayout(numberofDivisions = 100);
 
         self.titleDisplay = cmds.text(label = self.title, align="center", font="boldLabelFont")
@@ -30,7 +32,7 @@ class MR_TextureLink(object):
 
 
         self.titleSeparator = cmds.separator() ;
-        cmds.formLayout(self.mainForm, edit=True  attachControl=[self.titleSeparator, "top", 10 , self.titleDisplay],
+        cmds.formLayout(self.mainForm, edit=True,  attachControl=[self.titleSeparator, "top", 10 , self.titleDisplay],
                                                   attachForm=([self.titleSeparator, "left", 5],
                                                               [self.titleSeparator, "right", 5]          ))
 
@@ -38,21 +40,26 @@ class MR_TextureLink(object):
         cmds.formLayout(self.mainForm, edit=True, attachControl=[self.btnFolderSet, "top", 20, self.titleDisplay],
                                                   attachForm=[self.btnFolderSet, "left", 5])
 
-       cmds.showWindow();
+        cmds.showWindow();
 
-       self.textFieldFolderLocation = cmds.textField(text="set location")
-       cmds.formLayout(self.mainForm, edit=True, attachControl=([self.txtFieldFolderLocation, "top", 20, self.titleDisplay],
-                                                                [self.txtFieldFolderLocation, "left", 5, self.btnFolderSet],                            
-                                                 attachForm=[self.txtFieldFolderLocation, "right", 5]) 
+        self.txtFieldFolderLocation = cmds.textField(text="set location")
+        cmds.formLayout(self.mainForm, edit=True, attachControl=([self.txtFieldFolderLocation, "top", 20, self.titleDisplay],
+                                                                 [self.txtFieldFolderLocation, "left", 5, self.btnFolderSet]),                            
+                                                  attachForm=[self.txtFieldFolderLocation, "right", 5]) 
       
-      self.btnRelinkTextures = cmds.button(label="Relink Textures", height=30, width=150, command=self.relinkBtnCmd)
-      cmds.formLayout(self.mainForm, edit=True attachControl=[self.btnRelinkTextures, "top", 5, self.btnFolderSet],
+        self.btnRelinkTextures = cmds.button(label="Relink Textures", height=30, width=150, command=self.relinkBtnCmd)
+        cmds.formLayout(self.mainForm, edit=True, attachControl=[self.btnRelinkTextures, "top", 5, self.btnFolderSet],
                                                attachForm=[self.btnRelinkTextures, "left", 5])   
-                                               
+                                            
+     #set texture folder button function
+     
+        def SetFolderBtnCmd(self, *args):
+            cmds.fileBrowserDialog(mode=4, fc=self.relinkFolder, an="Set Folder", om="Reference")
+        
      #set textures button    
      
-     def    relinkBtnCmd(self, *args):
-            basePath = cmds.textField(self.txtFieldFolderLocation, query=True, text=True):
+        def    relinkBtnCmd(self, *args):
+            basePath = cmds.textField(self.txtFieldFolderLocation, query=True, text=True);
                 
             fileNodes = cmds.ls(type="file")
             
@@ -60,7 +67,7 @@ class MR_TextureLink(object):
                 
                 currPath = cmds.getAttr(node + ".fileTextureName")
                 pathList = currPath.split("/")
-                filename = pathList(-1)
+                filename = pathList[-1]
                 
                 newPath = "%s/%s" %(basePath, filename)
                 
@@ -70,7 +77,7 @@ class MR_TextureLink(object):
   
   # set folder function
   
-  def relinkFolder(self, fileName, fileType):
+    def relinkFolder(self, fileName, fileType):
       cmds.textField(self.txtFieldFolderLocation, edit=True, text=fileName);
       
-myTextRelink = MR_TextureLink() 
+myTextRelink = TextureLink() 
