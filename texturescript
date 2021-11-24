@@ -7,7 +7,7 @@ class TextureLink(object):
     def __init__(self):		
         self.window = "relinkWindow"
         self.title = "Texture Relink Window"
-        self.size (600, 350)
+        self.size = (600, 350)
         self.createWindow()
 
 
@@ -23,7 +23,7 @@ class TextureLink(object):
 
         # define window UI
         
-        self.mainForm = cmds.formLayout(numberofDivisions = 100);
+        self.mainForm = cmds.formLayout(numberOfDivisions = 100);
 
         self.titleDisplay = cmds.text(label = self.title, align="center", font="boldLabelFont")
         cmds.formLayout(self.mainForm, edit=True,   attachForm=(  [self.titleDisplay, "top", 5],
